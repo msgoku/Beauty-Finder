@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wishlist</title>
+    <link rel="stylesheet" href="wishlist.css">
+</head>
+<style>
+     body, html {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        /* Header styles */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: rgb(255, 85, 200);
+            color: white;
+            border-bottom: 1px solid transparent;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: background-color 0.3 ease;
+        }
+
+        .logo h1 {
+            font-size: 30px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin: 0;
+        }
+
+        .menu-toggle {
+            display: none;
+            cursor: pointer;
+        }
+
+        .menu-items {
+            display: flex;
+            gap: 20px;
+            margin-right: 40px;
+        }
+
+        .menu-items a {
+            text-decoration: none;
+            color: white;
+            font-size: 18px;
+        }
+
+        /* Responsive menu for smaller screens */
+        @media (max-width: 768px) {
+            .menu-items {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                right: 20px;
+                background: white;
+                padding: 10px;
+                border: 1px solid #e6e6e6;
+                border-radius: 8px;
+                width: 150px;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .menu-items.show {
+                display: flex;
+            }
+        }
+
+        main {
+            padding: 100px 20px 20px;
+            max-width: 800px;
+            margin: auto;
+        }
+
+        h2 {
+            color: rgb(255, 85, 200);
+            font-size: 24px;
+            margin: 20px 0;
+            text-align: center;
+            margin-top: 100px;
+        }
+
+        /* Input Field */
+        #new-list-name {
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            margin: 10px auto;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: border-color 0.3s ease;
+        }
+
+        #new-list-name:focus {
+            outline: none;
+            border-color: rgb(255, 85, 200);
+        }
+
+        /* Create New List Button */
+        button {
+            background-color: rgb(255, 85, 200);
+            color: white;
+            font-size: 16px;
+            padding: 10px 20px;
+            margin: 10px auto;
+            display: block;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: rgb(255, 117, 225);
+        }
+
+        /* Lists Container */
+        #lists-container {
+            margin-top: 20px;
+        }
+
+        /* List Box */
+        .wishlist-list {
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Title styling */
+        .wishlist-list h3 {
+            color: rgb(255, 85, 200);
+            margin: 0;
+            font-size: 18px;
+        }
+
+        /* Button container for alignment */
+        .button-container {
+            display: flex;
+            gap: 10px; /* Adds spacing between buttons */
+        }
+
+        /* Styles for buttons */
+        .wishlist-list button {
+            background-color: #ddd;
+            color: #555;
+            font-size: 14px;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .wishlist-list button:hover {
+            background-color: rgb(255, 85, 200);
+            color: white;
+        }
+
+        /* Wishlist Item Box */
+        .wishlist-item {
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .wishlist-item img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .wishlist-item h3 {
+            margin: 0;
+            color: rgb(255, 85, 200);
+            font-size: 16px;
+        }
+
+        .wishlist-item p {
+            margin: 5px 0;
+            color: #555;
+        }
+
+        .wishlist-item button {
+            background-color: #ffcccc;
+            color: #333;
+            font-size: 14px;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .wishlist-item button:hover {
+            background-color: rgb(255, 85, 200);
+            color: white;
+        }
+
+        /* Close Button for View */
+        button.close-btn {
+            background-color: rgb(255, 85, 200);
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 0;
+            display: block;
+            transition: background-color 0.3s ease;
+        }
+
+        button.close-btn:hover {
+            background-color: rgb(255, 117, 225);
+        }
+
+        .wishlist-list.edit-mode {
+            background-color: #f0f8ff;
+            padding: 10px;
+        }
+
+/* Edit Input */
+        .wishlist-list input[type="text"] {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 60%;
+            margin-right: 10px;
+        }
+
+        /* Button Container */
+        .button-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Edit, Save, and Cancel Buttons */
+        button {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        /* Edit Button */
+        button.edit-button {
+            background-color: #ff69b4;
+            color: white;
+        }
+
+        /* Save Button */
+        button.save-button {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        /* Cancel Button */
+        button.cancel-button {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .edit-mode input {
+            padding: 5px;
+            margin-right: 10px;
+            font-size: 14px;
+            width: 150px;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .button-container button {
+            padding: 5px 10px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        /* Style for Save and Cancel buttons during edit mode */
+        .save-button, .cancel-button {
+            padding: 5px 10px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        /* For the inline layout of Save and Cancel buttons */
+        #lists-container .edit-mode {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #lists-container .edit-mode input {
+            flex: 1;
+        }
+        footer {
+            background-color: #ffffff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        footer ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        footer ul li {
+            margin: 0 15px;
+        }
+
+        footer ul li a {
+            text-decoration: none;
+            color: black;
+            font-size: 14px;
+        }
+
+        footer p {
+            font-size: 12px;
+            color: rgb(255, 85, 200);
+        }
+
+        @media (max-width: 768px) {
+            .btn {
+                font-size: 12px;
+            }
+
+            .description-container {
+                padding: 40px 20px;
+            }
+        }
+
+</style>
+<body>
+    <header class="navbar">
+        <div class="logo">
+            <h1>BEAUTY FINDER</h1>
+        </div>
+        <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+        <nav class="menu-items">
+            <a href="homepage.html">Home</a>
+            <a href="catalog.html">Product</a>
+        </nav>
+    </header>
+    <h2>My Wishlist</h2>
+    <input type="text" id="new-list-name" placeholder="Enter list name">
+    <button onclick="createNewList()">Create New List</button>
+
+    <h3>Your Lists</h3>
+    <div id="lists-container"></div>
+    <footer>
+        <ul>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+        </ul>
+        <p>&copy; BEAUTY FINDER.Beauty Unveiled, Confidence Revealed.</p>
+    </footer>
+
+    <script src="wishlist.js"></script>
+</body>
+</html>
